@@ -41,8 +41,23 @@ def usuario_existe(usuario):
             if linhas [i].strip() == usuario:
                 return True
         return False
+
+def remover_usuario(usuario_alvo):
+    #lê todas as linhas do usuario
+    with open('login.txt','r') as f:
+        linhas = f.readlines()
+
+    #lista temporaria pra alocar os usuarios
+    usuarios = []
+    i = 0
+    while i < len(linhas):
+        usuario + linhas[i].strip()
+        if usuario == usuario_alvo:
+            
+        
+    
     
     
     
         
-login()
+criar_usuario()

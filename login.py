@@ -23,7 +23,7 @@ def criar_usuario():
     if conf_senha == senha:
         hash_senha = hashlib.sha256(senha.encode()).hexdigest()
 
-        with open ('login.txt', 'a') as f:
+        with open ('login.txt', 'r') as f:
             f.write (usuario + '\n')
             f.write (hash_senha)
         f.close()
@@ -51,8 +51,22 @@ def remover_usuario(usuario_alvo):
     usuarios = []
     i = 0
     while i < len(linhas):
-        usuario + linhas[i].strip()
+        usuario = linhas[i].strip()
         if usuario == usuario_alvo:
+            i += 2
+        else:
+            usuarios.append(linhas[i])
+            if i + 1 <len(linhas):
+                usuarios.append(linhas[i+1])
+            i += 2
+
+        #reescreve o login.txt
+    with open('login.txt','w') as f:
+        f.writelines(usuarios)
+
+    print(f'Usuario {usuario_alvo} removido com sucesso!')
+    
+        
             
         
     
@@ -60,4 +74,4 @@ def remover_usuario(usuario_alvo):
     
     
         
-criar_usuario()
+#criar_usuario()

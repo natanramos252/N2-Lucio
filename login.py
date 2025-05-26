@@ -11,7 +11,7 @@ def login():
 def criar_usuario():
     #função para criar usuario converte a senha para um hash usando o algoritimo
     #sha256 para cripitografar a senha e impedir que a mesmo possa ser convertida
-    #a original
+    #a originallllllllllllaaaaaaaaaaaaaaa
     usuario = input('Usuario: ')
 
     if usuario_existe(usuario):

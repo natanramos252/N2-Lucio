@@ -8,29 +8,31 @@ def login():
         print('Usuario não encontrado!')
     
 
-def criar_usuario():
-    #função para criar usuario converte a senha para um hash usando o algoritimo
-    #sha256 para cripitografar a senha e impedir que a mesmo possa ser convertida
-    #a original
+def cria_usuario():
+    #cria usuario 
+    
     usuario = input('Usuario: ')
-
-    if usuario_existe(usuario):
-        print ('ERRO: Usuario já exite!!!')
-        
-    senha = input('Digite a senha: ')
+    senha = input('Senha?: ')
     conf_senha = input('Confirme a senha: ')
 
-    if conf_senha == senha:
-        hash_senha = hashlib.sha256(senha.encode()).hexdigest()
+    if senha != conf_senha:
+        print('as senhas não corresponde')
+        senha = input('Senha?: ')
+        conf_senha = input('Confirme a senha: ')
 
-        with open ('login.txt', 'r') as f:
-            f.write (usuario + '\n')
-            f.write (hash_senha)
-        f.close()
-        print('Usuario criado com sucesso!')
-
+    if len(senha) < 8:
+        print('so é premitido senhas com mais de 8 cracteres')
+        senha = input('Senha?: ')
+        conf_senha = input('Confirme a senha: ')
     else:
-        print('As senhas não são iguais')
+        h = hashlib.sha256(senha.encode()).hexdigest()
+    
+    with open('login.txt','a') as f:
+        f.write(f'{usuario}|{h}\n')
+
+    print('Usuario criado com sucesso!!')
+
+        
 
 def usuario_existe(usuario):
     ##try:

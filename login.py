@@ -4,8 +4,7 @@ def login():
     usuario = input('Usuario: ')
     senha = input('Senha: ')
 
-    if not usuario_existe(usuario):
-        print('Usuario não encontrado!')
+    h_senha = hashlib.sha256(senha.encode()).hexdigest()
     
 
 def cria_usuario():
@@ -32,48 +31,19 @@ def cria_usuario():
 
     print('Usuario criado com sucesso!!')
 
-        
 
-def usuario_existe(usuario):
-    ##try:
-        with open('login.txt','r') as f:
-            linhas = f.readlines()
-
-        for i in range (0, len(linhas), 2):
-            if linhas [i].strip() == usuario:
-                return True
-        return False
-
-def remover_usuario(usuario_alvo):
-    #lê todas as linhas do usuario
+def autera_usuario(usuario_alvo,n_usuario,h_senha):
+    
+    #autera usuario
     with open('login.txt','r') as f:
-        linhas = f.readlines()
+        L = f.readlines()
 
-    #lista temporaria pra alocar os usuarios
-    usuarios = []
-    i = 0
-    while i < len(linhas):
-        usuario = linhas[i].strip()
-        if usuario == usuario_alvo:
-            i += 2
-        else:
-            usuarios.append(linhas[i])
-            if i + 1 <len(linhas):
-                usuarios.append(linhas[i+1])
-            i += 2
-
-        #reescreve o login.txt
     with open('login.txt','w') as f:
-        f.writelines(usuarios)
-
-    print(f'Usuario {usuario_alvo} removido com sucesso!')
-    
-        
+        for linha in L:
+            if usuario_alvo in linha:
+                f.write(f'{n_usuario}|{h_senha}\n')
+            else:
+                f.write(linha)
+                
             
-        
-    
-    
-    
-    
-        
-#criar_usuario()
+

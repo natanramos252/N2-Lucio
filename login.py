@@ -5,7 +5,27 @@ def login():
     senha = input('Senha: ')
 
     h_senha = hashlib.sha256(senha.encode()).hexdigest()
-    
+
+    autenticado = False
+
+    try:
+        with open('login.txt','r') as f:
+            for linha in f:
+                nome, hash_senha = linha.strip().split('|')
+                if usuario  == nome.strip() and h_senha == hash_senha.strip():
+                    autenticado = True
+                    break
+
+        if autenticado:
+            print('Login bem sucedido!')
+        else:
+            print('Dados incorretos!')
+            print(f'{h_senha}')
+            
+    except FileNotFoundError:
+        print(f'{h_senha}')
+        print('Nenhum usuario cadastrado \n Cria um usuario e senha')
+        cria_usuario()
 
 def cria_usuario():
     #cria usuario 

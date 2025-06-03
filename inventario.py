@@ -51,6 +51,21 @@ def ad_inventario(d_inventario, chave):
     
     return chave+1
 
+def apaga_iten(d_inventario, chave):
+    del d_inventario[chave]
+
+    return d_inventario
+
+def grava_inventario(d_inventario):
+    with open('inventario.cvs','w') as inventario:
+        for chave, dados in inventario:
+            nome = dados[0]
+            qt = dados[1]
+            preco = dados[2]
+            impor = dados[3]
+            d_inventario.write(f'{chave};{nome};{qt};{preco};{impor}')
+        
+
 
 
 

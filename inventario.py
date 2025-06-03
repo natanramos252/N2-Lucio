@@ -1,13 +1,14 @@
-def enc_maiorchave(d_inventario):
+def enc_iddisp(d_inventario):
     #função para encontrar maior chave do dicionario
-    global chave
     
     if d_inventario == {}:
         chave = 0
     else:
         chave = max(d_inventario.keys())+1
+    return chave
 
 def le_inventario():
+    
     try:
         d_inventario ={}
         with open('inventario.csv','r') as inventario:
@@ -30,23 +31,30 @@ adicione o arquivo ou um novo sera criado''')
            
     return d_inventario
                 
-def ad_inventario(d_inventario):
-    #adiciona itens no inventario
+def ad_inventario(d_inventario, chave):
+    #adiciona itens no dicionario inventario
     
-    enc_maiorchave(d_inventario)
     
-    id = chave + 1
+    #id = chave
     nome = input('nome do produto: ')
     qt = int(input('quantidade: '))
     preco = float(input('valor: '))
-    impor = input('O produto é importado:(sim/ não')
+    impor = input('O produto é importado:(sim/ não): ')
 
     if impor == 'sim' or impor =='s':
         impor = True
     else:
         impor = False
         
-    d_inventario['id'] = [nome, qt, preco, impor]
+    d_inventario[chave] = [nome, qt, preco, impor]
+
     
+    return chave+1
+
+
+
+
 d_inventario = le_inventario()
+chave = enc_iddisp(d_inventario)
+chave = ad_inventario(d_inventario, chave)
 

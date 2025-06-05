@@ -1,7 +1,6 @@
 import hashlib
 
 
-
 def login():
     usuario = input('Usuario: ')
     senha = input('Senha: ')
@@ -17,7 +16,7 @@ def login():
                     break
 
         if autenticado:
-            print('Login bem sucedido!')    
+            print('Login bem sucedido!')
         else:
             if not (usuario_existe(usuario)):
                 print("Usuario, nao existente, criando...")
@@ -65,17 +64,16 @@ def cria_usuario():
     print('Usuario criado com sucesso!!')
 
 
-def altera_usuario(usuario_alvo, novo_usuario, nova_senha):
-    h_senha = hashlib.sha256(nova_senha.encode()).hexdigest()
+def altera_usuario(usuario_alvo, novo_usuario):
 
     with open('login.txt','r') as f:
         linhas = f.readlines()
 
     with open('login.txt','w') as f:
         for linha in linhas:
-            nome, _ = linha.strip().split('|')
+            nome, hash = linha.strip().split('|')
             if nome == usuario_alvo:
-                f.write(f'{novo_usuario}|{h_senha}\n')
+                f.write(f'{novo_usuario}|{hash}\n')
             else:
                 f.write(linha)
                 

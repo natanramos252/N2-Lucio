@@ -11,7 +11,7 @@ def le_inventario():
     
     try:
         d_inventario ={}
-        with open('inventario.csv','r') as inventario:
+        with open('inventario.cvs','r') as inventario:
             for linha in inventario:
                 chave, nome, qt, preco, impor = linha.rstrip().split(';')
                 chave = int(chave)
@@ -50,6 +50,21 @@ def ad_inventario(d_inventario, chave):
 
     
     return chave+1
+
+def apaga_iten(d_inventario, chave):
+    del d_inventario[chave]
+
+    return d_inventario
+
+def grava_inventario(d_inventario):
+    with open('inventario.cvs','w') as inventario:
+        for chave, dados in d_inventario.items():
+            nome = dados[0]
+            qt = dados[1]
+            preco = dados[2]
+            impor = dados[3]
+            inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
+        
 
 
 

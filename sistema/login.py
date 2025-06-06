@@ -29,6 +29,8 @@ def login():
         print('Nenhum usuario cadastrado \n Cria um usuario e senha')
         cria_usuario()
 
+    return autenticado
+
 def usuario_existe(usuario):
     try:
         with open('login.txt', 'r') as f:

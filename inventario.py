@@ -64,12 +64,19 @@ def grava_inventario(d_inventario):
             preco = dados[2]
             impor = dados[3]
             inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
-        
+
+def imp_inventario(d_inventario):
+    #esta dando erro de sintax
+    for chave, dados in d_inventario.items():
+        print(f'{chave}: ')
+        for item in dados:
+            print(f'{nome} | {qt}| {preco}| {impor}')
 
 
 
 
 d_inventario = le_inventario()
 chave = enc_iddisp(d_inventario)
-chave = ad_inventario(d_inventario, chave)
+#chave = ad_inventario(d_inventario, chave)
 
+print(d_inventario)

@@ -1,5 +1,9 @@
 from sistema import *
+import os 
 
+def LimpaTela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
 def menu_principal():
     
     x = int(input('''O que você gostaria de fazer?

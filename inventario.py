@@ -23,7 +23,7 @@ def caminho():
     return caminho
     
 def le_inventario():
-    
+    #adiciona o conteudo do arquivo em um dicionario
     try:
         d_inventario ={}
         with open('inventario.csv','r') as inventario:
@@ -111,11 +111,21 @@ def imp_inventario(dicionario):
         #print(f'{nome} | {qt}| {preco}| {impor}')
 
 
+def busca_nome(dicionario):
+    produto = input('qual produto: ')
+    for chave, dados in dicionario.items():
+        nome = dados[0]
+        qt = dados[1]
+        preco = dados[2]
+        impor = dados[3]
+        if produto == nome:
+            print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
 
+            #print('print(f'{chave}: {nome}| {qt:>6}| {preco}| {impor}')')
 
 d_inventario = le_inventario()
 chave = enc_iddisp(d_inventario)
 #chave = ad_inventario(d_inventario, chave)
 
 #print(d_inventario)
-imp_inventario(d_inventario) 
+#imp_inventario(d_inventario) 

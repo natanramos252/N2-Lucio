@@ -1,3 +1,30 @@
+def menu_inventario():
+    x = int(input('''O que você gostaria de fazer?
+                  
+    (1) cadastrar produto
+    (2) apagar produto
+    (3) consultar
+    '''))
+
+    while True:
+        if x == 1:
+            ad_inventario()
+            break
+        elif x == 2:
+            y = int(input('''Digite o id do produto que deseja apagar: '''))
+            if y not in d_inventario:
+                print('id não encontrado!')
+            else:
+                apaga_item()
+            break
+        elif x == 3:
+            
+            break
+        else:
+            print("Entrada invalida! Digite novamente: ")
+            x = int(input())
+
+
 def enc_iddisp(d_inventario):
     #função para encontrar maior chave do dicionario
     
@@ -9,7 +36,7 @@ def enc_iddisp(d_inventario):
 
 def caminho():
     
-    caminho = imput('informe o caminho: ')
+    caminho = input('informe o caminho: ')
     return caminho
     
 def le_inventario():
@@ -44,7 +71,6 @@ def le_inventario():
 def ad_inventario(d_inventario, chave):
     #adiciona itens no dicionario inventario
     
-    
     #id = chave
     nome = input('nome do produto: ')
     qt = int(input('quantidade: '))
@@ -61,7 +87,7 @@ def ad_inventario(d_inventario, chave):
     
     return chave+1
 
-def apaga_iten(d_inventario, chave):
+def apaga_item(d_inventario, chave):
     del d_inventario[chave]
 
     return d_inventario

@@ -1,4 +1,5 @@
 import hashlib
+from sistema import *
 
 
 def login():
@@ -17,6 +18,7 @@ def login():
 
         if autenticado:
             print('Login bem sucedido!')
+            menu_inventario()
         else:
             if not (usuario_existe(usuario)):
                 print("Usuario, nao existente, criando...")

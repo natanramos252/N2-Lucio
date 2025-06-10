@@ -35,12 +35,27 @@ def enc_iddisp(d_inventario):
     return chave
 
 def caminho():
+<<<<<<< HEAD:sistema/inventario.py
     
     caminho = input('informe o caminho: ')
+=======
+
+    caminho = 'inventario.csv'
+    x= int(input('''1 - para indicar um caminho
+              2 - para criar um novo arquivo'''))
+
+    while True:
+        if x == 1:
+            caminho = imput('informe o caminho: ')
+            break
+        else:
+            break
+            
+>>>>>>> 5e2cd83d6ba3fd41d5acd67340a832f264e0288f:inventario.py
     return caminho
     
 def le_inventario():
-    
+    #adiciona o conteudo do arquivo em um dicionario
     try:
         d_inventario ={}
         with open('inventario.csv','r') as inventario:
@@ -58,11 +73,9 @@ def le_inventario():
                 d_inventario[chave] = [nome, qt, preco, impor]
         
     except FileNotFoundError:
-        print('''Arquivo inventario.csv não encontrado!!!! adicione o arquivo ou um novo sera criado.
-              
-              1 - para indicar um caminho
-              2 - para criar um novo arquivo''')
-        opção = int(input())
+        print('''Arquivo inventario.csv não encontrado!!!!
+adicione o arquivo ou um novo sera criado.''')
+        caminho()        
 
         
            
@@ -102,25 +115,48 @@ def grava_inventario(d_inventario):
             inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
 
 def imp_inventario(dicionario):
+    m_nome = 0
+    produtos = 'produtos'
+    
     #esta dando erro de sintax
-    print('---'*20)
-    print('produtos')
-    print('---'*20)
+    print('-'*80)
+    print(f'{'produtos':^80}')
+    print('-'*80)
+
+    for chave, dados in dicionario.items():
+        if m_nome < len(dados[0]):
+            m_nome = len(dados[0])
+
+           
 
     for chave, dados in dicionario.items():
         nome = dados[0]
         qt = dados[1]
         preco = dados[2]
         impor = dados[3]
-        print(f'{chave}: {nome} | {qt}| {preco}| {impor}')
+        if impor == True:
+            impor = 'importado'
+        else:
+            impor ='nacional'
+        print(f'{chave}: {nome:^{m_nome}}| {qt:>6}| {preco:>10.2f}| {impor:^10}')
         #print(f'{nome} | {qt}| {preco}| {impor}')
 
 
+def busca_nome(dicionario):
+    produto = input('qual produto: ')
+    for chave, dados in dicionario.items():
+        nome = dados[0]
+        qt = dados[1]
+        preco = dados[2]
+        impor = dados[3]
+        if produto == nome:
+            print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
 
+            #print('print(f'{chave}: {nome}| {qt:>6}| {preco}| {impor}')')
 
 d_inventario = le_inventario()
 chave = enc_iddisp(d_inventario)
 #chave = ad_inventario(d_inventario, chave)
 
 #print(d_inventario)
-imp_inventario(d_inventario) 
+#imp_inventario(d_inventario) 

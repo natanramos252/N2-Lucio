@@ -143,12 +143,16 @@ def empurra(L, n,posicao):
 def bubble_sort(L, posicao=0):
     n = len(L)
     while n>1:
-        empura(L, n, posicao)
+        empurra(L, n, posicao)
         n -= 1
 
-def ordena(dicionario):
+def ordena(dicionario, algoritmo='bubble'):
     L = list(dicionario.items())
-    bubble_sort(L)
+    if algoritmo == 'bubble':
+        
+        bubble_sort(L)
+    else:
+        0#merge
 
     return L
     
@@ -158,27 +162,25 @@ def busca_nome(dicionario):
 
     quant = len(dicionario)
 
-    #if quant > 100:
-    ordena(dicionario)
-        
-    #ordena(dicionario)
-    #L = list(dicionario.items())# converte
-    
-    #qlinha = 0 
-    #for x in L:
-    #    qlinha += 1
-        
-    for chave, dados in L():
-        nome = dados[0]
-        qt = dados[1]
-        preco = dados[2]
-        impor = dados[3]
-        if produto == nome:
-            print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
-            break
+    if quant <= 50:
+              
+        for chave, dados in L():
+            nome = dados[0]
+            qt = dados[1]
+            preco = dados[2]
+            impor = dados[3]
+            if produto == nome:
+                print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
+                break
+        else:
+            print('item não existe')
     else:
-        print('item não existe')
-            
+        if quant <=100:
+            ordena(dicionario, 'bubble')
+        else:
+            ordena(dicionario, 'merge')
+    #faz a busca binaria
+                            
 d_inventario = le_inventario()
 chave = enc_iddisp(d_inventario)
 #chave = ad_inventario(d_inventario, chave)

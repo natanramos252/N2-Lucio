@@ -7,26 +7,43 @@ def enc_iddisp(d_inventario):
         chave = max(d_inventario.keys())+1
     return chave
 
-def caminho():
+def def_caminho(caminho):
 
-    caminho = 'inventario.csv'
-    x= int(input('''1 - para indicar um caminho
-              2 - para criar um novo arquivo'''))
-
-    while True:
-        if x == 1:
-            caminho = imput('informe o caminho: ')
-            break
-        else:
-            break
-            
-    return caminho
+    #caminho = 'inventario.csv'
+    print('1 - para indicar um caminho')
+    print('2 - para criar um novo arquivo')
+    x= int(input('opção: '))
+    
+    if x == 1:
+        
+        return input('informe o caminho: ')
+    
+    else:
+        arq = open('inventario.csv','w')
+        arq.close()
+        
+        return 'inventario.csv'
     
 def le_inventario():
+    caminho = 'inventario.csv'
+    while True:
+        
+        try:
+            arq = open(caminho,'r')
+            
+        except FileNotFoundError:
+            caminho = def_caminho(caminho)
+        else:
+            arq.close()
+            break
+        
+            
+    
     #adiciona o conteudo do arquivo em um dicionario
     try:
-        d_inventario ={}
-        with open('inventario.csv','r') as inventario:
+        
+        with open(caminho,'r') as inventario:
+            d_inventario ={}
             for linha in inventario:
                 chave, nome, qt, preco, impor = linha.rstrip().split(';')
                 chave = int(chave)
@@ -40,10 +57,9 @@ def le_inventario():
                 
                 d_inventario[chave] = [nome, qt, preco, impor]
         
-    except FileNotFoundError:
-        print('''Arquivo inventario.csv não encontrado!!!!
-adicione o arquivo ou um novo sera criado.''')
-        caminho()        
+    except :
+        print('''erro.''')
+        #def_caminho(caminho)        
 
         
            
@@ -83,15 +99,18 @@ def grava_inventario(d_inventario):
             impor = dados[3]
             inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
 
+def cabecalho(texto):
+    
+    print('-'*80)
+    print(f'{texto:^80}')
+    print('-'*80)
+
 def imp_inventario(dicionario):
     m_nome = 0
     produtos = 'produtos'
-    
-    #esta dando erro de sintax
-    print('-'*80)
-    print(f'{'produtos':^80}')
-    print('-'*80)
 
+    cabecalho(texto='produtos')
+  
     for chave, dados in dicionario.items():
         if m_nome < len(dados[0]):
             m_nome = len(dados[0])
@@ -108,11 +127,42 @@ def imp_inventario(dicionario):
         else:
             impor ='nacional'
         print(f'{chave}: {nome:^{m_nome}}| {qt:>6}| {preco:>10.2f}| {impor:^10}')
-        #print(f'{nome} | {qt}| {preco}| {impor}')
 
+def troca(L, i, j):
+    temp = L[i]
+    L[i] = L[j]
+    L[j] = temp
 
+def empurra(L, n,posicao):
+    i = 0
+    while i < n - 1:
+        if L[i][posicao] < L[i + 1][1][posicao]:
+            troca(L, i, i + 1)
+        i += 1
+        
+def bubble_sort(L, posicao=0):
+    n = len(L)
+    while n>1:
+        empura(L, n, posicao)
+        n -= 1
+
+def ordena(L):
+    L = list(dicionaio.items())
+    bubble_sort(L)
+
+    return L
+    
+        
 def busca_nome(dicionario):
     produto = input('qual produto: ')
+    
+    #ordena(dicionario)
+    #L = list(dicionario.items())# converte
+    
+    #qlinha = 0 
+    #for x in L:
+    #    qlinha += 1
+        
     for chave, dados in dicionario.items():
         nome = dados[0]
         qt = dados[1]
@@ -120,9 +170,9 @@ def busca_nome(dicionario):
         impor = dados[3]
         if produto == nome:
             print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
-
-            #print('print(f'{chave}: {nome}| {qt:>6}| {preco}| {impor}')')
-
+    else:
+        print('item não existe')
+            
 d_inventario = le_inventario()
 chave = enc_iddisp(d_inventario)
 #chave = ad_inventario(d_inventario, chave)

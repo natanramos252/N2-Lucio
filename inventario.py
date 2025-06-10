@@ -146,8 +146,8 @@ def bubble_sort(L, posicao=0):
         empura(L, n, posicao)
         n -= 1
 
-def ordena(L):
-    L = list(dicionaio.items())
+def ordena(dicionario):
+    L = list(dicionario.items())
     bubble_sort(L)
 
     return L
@@ -155,7 +155,12 @@ def ordena(L):
         
 def busca_nome(dicionario):
     produto = input('qual produto: ')
-    
+
+    quant = len(dicionario)
+
+    #if quant > 100:
+    ordena(dicionario)
+        
     #ordena(dicionario)
     #L = list(dicionario.items())# converte
     
@@ -163,13 +168,14 @@ def busca_nome(dicionario):
     #for x in L:
     #    qlinha += 1
         
-    for chave, dados in dicionario.items():
+    for chave, dados in L():
         nome = dados[0]
         qt = dados[1]
         preco = dados[2]
         impor = dados[3]
         if produto == nome:
             print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
+            break
     else:
         print('item não existe')
             

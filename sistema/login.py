@@ -1,10 +1,14 @@
 import hashlib
+<<<<<<< HEAD
 from sistema import *
 
+=======
+from getpass import getpass
+>>>>>>> 2b4d7a8 (10-06)
 
 def login():
     usuario = input('Usuario: ')
-    senha = input('Senha: ')
+    senha = getpass('Senha: ')
     h_senha = hashlib.sha256(senha.encode()).hexdigest()
     autenticado = False
 
@@ -29,7 +33,7 @@ def login():
     except FileNotFoundError:
         print(f'{h_senha}')
         print('Nenhum usuario cadastrado \n Cria um usuario e senha')
-        cria_usuario()
+        #cria_usuario()
 
     return autenticado
 
@@ -50,8 +54,8 @@ def cria_usuario():
     usuario = input('Usuario: ')
 
     while True:
-        senha = input('Senha: ')
-        conf_senha = input('Confirme a senha: ')
+        senha = getpass('Senha: ')
+        conf_senha = getpass('Confirme a senha: ')
 
         if senha != conf_senha:
             print('as senhas não coincidem.')
@@ -80,6 +84,16 @@ def altera_usuario(usuario_alvo, novo_usuario):
                 f.write(f'{novo_usuario}|{hash}\n')
             else:
                 f.write(linha)
-                
+
+def apagar_usuario(input_usuario):
+
+    with open('login.txt','r') as f:
+        linhas = f.readlines()
+
+    with open('login.txt','w') as f:
+        for linha in linhas:
+            if input_usuario not in linha.strip().split(':')[0]:
+                f.write(linha)
             
 
+    

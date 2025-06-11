@@ -2,6 +2,9 @@ import hashlib
 from sistema.login import *
 
 def gerenciar():
+
+    cabecalho(texto='gerenciar usuarios')
+    
     listar_usuarios()
     r = int(input('''
 O que você deseja fazer?          

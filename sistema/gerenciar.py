@@ -3,7 +3,7 @@ from sistema.login import *
 
 def gerenciar():
 
-    cabecalho(texto='gerenciar usuarios')
+    #cabecalho(texto = 'gerenciar usuarios')
     
     listar_usuarios()
     r = int(input('''

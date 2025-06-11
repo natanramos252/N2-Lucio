@@ -1,3 +1,41 @@
+from sistema import *
+
+def LimpaTela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def menu_inventario():
+
+    cabecalho(texto='controle de inventario\n')
+    print('O que você gostaria de fazer?')
+    print('(1) cadastrar produtos ')
+    print('(2) apagar produto')
+    print('(3) consultar')
+    print('(4) mostra todo o inventario')
+    
+    x = int(input('opção: '))
+    
+
+    while True:
+        if x == 1:
+            ad_inventario(d_inventario, chave)
+            break
+        elif x == 2:
+            apaga_iten()
+            break
+        elif x == 3:
+            #LimpaTela()
+            busca_nome(d_inventario)
+            break
+        elif x == 4:
+            imp_inventario(d_inventario)
+            break
+            
+        else:
+            print("Entrada invalida! Digite novamente: ")
+            x = int(input())
+
+
+
 def enc_iddisp(d_inventario):
     #função para encontrar maior chave do dicionario
     
@@ -67,23 +105,37 @@ def le_inventario():
                 
 def ad_inventario(d_inventario, chave):
     #adiciona itens no dicionario inventario
-    
-    
-    #id = chave
-    nome = input('nome do produto: ')
-    qt = int(input('quantidade: '))
-    preco = float(input('valor: '))
-    impor = input('O produto é importado:(sim/ não): ')
+    #LimpaTela()
+    cabecalho(texto = 'adciona itens')
 
-    if impor == 'sim' or impor =='s':
-        impor = True
-    else:
-        impor = False
-        
-    d_inventario[chave] = [nome, qt, preco, impor]
-
+    while True:
     
-    return chave+1
+        nome = input('nome do produto: ')
+
+        if not nome:
+            print('Cadastro de produtos finalizados')
+            menu_inventario()
+            break
+
+        try:      
+            qt = int(input('quantidade: '))
+            preco = float(input('valor: '))
+            impor = input('O produto é importado:(sim/ não): ')
+
+            if impor == 'sim' or impor =='s':
+                impor = True
+            else:
+                impor = False
+                
+            d_inventario[chave] = [nome, qt, preco, impor]
+            chave +=1
+        except ValueError: 
+            print("Erro: Digite valores numéricos válidos para quantidade e preço!")
+            continue  
+
+            
+    return chave
+    
 
 def apaga_iten(d_inventario, chave):
     del d_inventario[chave]

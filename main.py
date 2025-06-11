@@ -1,8 +1,8 @@
 from sistema import *
 import os 
 
-def LimpaTela():
-    os.system('cls' if os.name == 'nt' else 'clear')
+##def LimpaTela():
+##    os.system('cls' if os.name == 'nt' else 'clear')
 
 def letreiro():
  
@@ -58,31 +58,11 @@ def menu_principal():
             x = int(input())
     
 
-def menu_inventario():
-    x = int(input('''O que você gostaria de fazer?
-    (1) cadastrar produto
-    (2) apagar produto
-    (3) consultar
-    '''))
-
-    while True:
-        if x == 1:
-            ad_inventario(d_inventario, chave)
-            break
-        elif x == 2:
-            apaga_iten()
-            break
-        elif x == 3:
-            
-            break
-        else:
-            print("Entrada invalida! Digite novamente: ")
-            x = int(input())
-
 letreiro()
 
-menu_principal()
+if menu_principal():
+    LimpaTela()
+    menu_inventario()
 
-LimpaTela()
-
-menu_inventario()
+else:
+    menu_principal

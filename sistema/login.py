@@ -1,10 +1,10 @@
 import hashlib
-<<<<<<< HEAD
+#<<<<<<< HEAD
 from sistema import *
 
-=======
+#=======
 from getpass import getpass
->>>>>>> 2b4d7a8 (10-06)
+#>>>>>>> 2b4d7a8 (10-06)
 
 def login():
     usuario = input('Usuario: ')

@@ -58,10 +58,10 @@ def menu_principal():
             x = int(input())
     
 
-<<<<<<< HEAD
-menu_principal()
+#<<<<<<< HEAD
 
-=======
+
+#=======
 def menu_inventario():
     x = int(input('''O que você gostaria de fazer?
     (1) cadastrar produto
@@ -89,5 +89,5 @@ menu_principal()
 
 LimpaTela()
 
->>>>>>> 2b4d7a8 (10-06)
+#>>>>>>> 2b4d7a8 (10-06)
 menu_inventario()

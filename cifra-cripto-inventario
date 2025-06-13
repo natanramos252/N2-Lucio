@@ -25,7 +25,7 @@ class CriptografiaInventario:
                 novo_codigo = codigo + desloc
                 while novo_codigo > 126:
                     novo_codigo -= 95
-                enquanto novo_codigo < 32:
+                while novo_codigo < 32:
                     novo_codigo += 95
                 resultado.append(chr(novo_codigo))
             else:

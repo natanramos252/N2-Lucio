@@ -19,14 +19,13 @@ class CriptografiaInventario:
             texto = str(texto)
         resultado = []
         desloc = self.deslocamento if operacao == 'criptografar' else -self.deslocamento
-
         for char in texto:
             codigo = ord(char)
             if 32 <= codigo <= 126:
                 novo_codigo = codigo + desloc
                 while novo_codigo > 126:
                     novo_codigo -= 95
-                while novo_codigo < 32:
+                enquanto novo_codigo < 32:
                     novo_codigo += 95
                 resultado.append(chr(novo_codigo))
             else:
@@ -57,18 +56,34 @@ class CriptografiaInventario:
             dados_descripto[id_prod] = campos_descripto
         return dados_descripto
 
-#Exemplo de uso
+    def salvar_em_arquivo(self, dados: Dict[int, List[Union[str, int, float, bool]]], nome_arquivo: str):
+        dados_criptografados = self.criptografar_dados(dados)
+        with open(nome_arquivo, "w", encoding="utf-8") as f:
+            for id_prod, campos in dados_criptografados.items():
+                linha = f"{id_prod};{';'.join(campos)}\n"
+                f.write(linha)
+
+    def carregar_do_arquivo(self, nome_arquivo: str) -> Dict[int, List[Union[str, int, float, bool]]]:
+        dados_lidos = {}
+        try:
+            with open(nome_arquivo, "r", encoding="utf-8") as f:
+                for linha in f:
+                    partes = linha.strip().split(";")
+                    id_prod = int(partes[0])
+                    dados_lidos[id_prod] = partes[1:]
+            return self.descriptografar_dados(dados_lidos)
+        except FileNotFoundError:
+            return {}
+
 if __name__ == "__main__":
+    chave = "minhaSenhaForte"
+    cripto = CriptografiaInventario(chave)
+
     dados = {
         1: ["Mouse", 10, 59.90, False],
         2: ["Teclado", 5, 89.90, True]
     }
 
-    chave = "minhaSenhaForte"
-    cripto = CriptografiaInventario(chave)
-
-    dados_criptografados = cripto.criptografar_dados(dados)
-    print("Criptografado:", dados_criptografados)
-
-    dados_descriptografados = cripto.descriptografar_dados(dados_criptografados)
-    print("Descriptografado:", dados_descriptografados)
+    cripto.salvar_em_arquivo(dados, "inventario.csv")
+    dados_lidos = cripto.carregar_do_arquivo("inventario.csv")
+    print(dados_lidos)

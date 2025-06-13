@@ -1,5 +1,10 @@
 import hashlib
+<<<<<<< HEAD
 from getpass import getpass
+=======
+from sistema import *
+
+>>>>>>> refs/remotes/origin/main
 
 def login():
     usuario = input('Usuario: ')
@@ -17,6 +22,7 @@ def login():
 
         if autenticado:
             print('Login bem sucedido!')
+            menu_inventario()
         else:
             if not (usuario_existe(usuario)):
                 print("Usuario, nao existente, criando...")

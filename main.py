@@ -65,4 +65,4 @@ if menu_principal():
     menu_inventario()
 
 else:
-    menu_principal
+    menu_principal()

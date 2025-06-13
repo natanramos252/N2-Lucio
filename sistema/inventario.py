@@ -1,10 +1,10 @@
 def menu_inventario():
-    x = int(input('''O que você gostaria de fazer?
-                  
-    (1) cadastrar produto
-    (2) apagar produto
-    (3) consultar
-    '''))
+
+    print('(1) cadastrar produto')
+    print('(2) apagar produto')
+    print('(3) consultar produto')
+    print('(4) impromi na tela todos os procutos')
+    x = input('qual opção: ')
 
     while True:
         if x == 1:
@@ -20,6 +20,8 @@ def menu_inventario():
         elif x == 3:
             
             break
+        elif x==4:
+            imp_inventario(d_inventario)
         else:
             print("Entrada invalida! Digite novamente: ")
             x = int(input())

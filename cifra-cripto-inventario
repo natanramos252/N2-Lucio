@@ -1,0 +1,74 @@
+import hashlib
+from typing import Dict, List, Union
+
+class CriptografiaInventario:
+    def __init__(self, chave: str, salt: str = None):
+        if not chave or len(chave) < 4:
+            raise ValueError("A chave deve ter pelo menos 4 caracteres.")
+        self.chave = chave
+        self.salt = salt if salt else "s3gIn@2023"
+        self.deslocamento = self._gerar_deslocamento()
+
+    def _gerar_deslocamento(self) -> int:
+        hash_obj = hashlib.sha256((self.chave + self.salt).encode('utf-8'))
+        hash_hex = hash_obj.hexdigest()
+        return sum(ord(c) for c in hash_hex) % 23 + 3
+
+    def _processar_texto(self, texto: str, operacao: str) -> str:
+        if not isinstance(texto, str):
+            texto = str(texto)
+        resultado = []
+        desloc = self.deslocamento if operacao == 'criptografar' else -self.deslocamento
+
+        for char in texto:
+            codigo = ord(char)
+            if 32 <= codigo <= 126:
+                novo_codigo = codigo + desloc
+                while novo_codigo > 126:
+                    novo_codigo -= 95
+                while novo_codigo < 32:
+                    novo_codigo += 95
+                resultado.append(chr(novo_codigo))
+            else:
+                resultado.append(char)
+        return ''.join(resultado)
+
+    def criptografar_dados(self, dados: Dict[int, List[Union[str, int, float, bool]]]) -> Dict[int, List[str]]:
+        dados_cripto = {}
+        for id_prod, campos in dados.items():
+            campos_cripto = [
+                self._processar_texto(str(campos[0]), 'criptografar'),
+                self._processar_texto(str(campos[1]), 'criptografar'),
+                self._processar_texto(str(campos[2]), 'criptografar'),
+                self._processar_texto(str(campos[3]), 'criptografar')
+            ]
+            dados_cripto[id_prod] = campos_cripto
+        return dados_cripto
+
+    def descriptografar_dados(self, dados: Dict[int, List[str]]) -> Dict[int, List[Union[str, int, float, bool]]]:
+        dados_descripto = {}
+        for id_prod, campos in dados.items():
+            campos_descripto = [
+                self._processar_texto(campos[0], 'descriptografar'),
+                int(self._processar_texto(campos[1], 'descriptografar')),
+                float(self._processar_texto(campos[2], 'descriptografar')),
+                self._processar_texto(campos[3], 'descriptografar') == 'True'
+            ]
+            dados_descripto[id_prod] = campos_descripto
+        return dados_descripto
+
+# Exemplo de uso (teste isolado)
+if __name__ == "__main__":
+    dados = {
+        1: ["Mouse", 10, 59.90, False],
+        2: ["Teclado", 5, 89.90, True]
+    }
+
+    chave = "minhaSenhaForte"
+    cripto = CriptografiaInventario(chave)
+
+    dados_criptografados = cripto.criptografar_dados(dados)
+    print("Criptografado:", dados_criptografados)
+
+    dados_descriptografados = cripto.descriptografar_dados(dados_criptografados)
+    print("Descriptografado:", dados_descriptografados)

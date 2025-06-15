@@ -1,75 +1,65 @@
 import hashlib
-<<<<<<< HEAD
 from getpass import getpass
-=======
-from sistema import *
+from .utils import cabecalho
 
->>>>>>> refs/remotes/origin/main
 
 def login():
-    usuario = input('Usuario: ')
-    senha = getpass('Senha: ')
-    h_senha = hashlib.sha256(senha.encode()).hexdigest()
-    autenticado = False
-
+    cabecalho("Login")
+    usuario = input("Usuário: ").strip()
+    senha = getpass("Senha: ")
+    h = hashlib.sha256(senha.encode()).hexdigest()
     try:
-        with open('login.txt','r') as f:
-            for linha in f:
-                nome, hash_senha = linha.strip().split('|')
-                if usuario  == nome and h_senha == hash_senha:
-                    autenticado = True
-                    break
-
-        if autenticado:
-            print('Login bem sucedido!')
-            menu_inventario()
-        else:
-            if not (usuario_existe(usuario)):
-                print("Usuario, nao existente, criando...")
-                cria_usuario()
-            else:
-                print('Dados incorretos!')
-            
+        with open('login.txt', 'r') as f:
+            for l in f:
+                nome, hs = l.strip().split('|')
+                if usuario == nome and h == hs:
+                    print("Login bem-sucedido!")
+                    return True
     except FileNotFoundError:
-        print(f'{h_senha}')
-        print('Nenhum usuario cadastrado \n Cria um usuario e senha')
-        #cria_usuario()
-
-    return autenticado
+        print("Nenhum usuário cadastrado, Criando...")
+        cria_usuario()
+        return True
+    print("Dados incorretos ou usuário não existe, deseja criar um novo? (0) Não e (1) Sim")
+    if int(input("--> ")) == 1:
+        cria_usuario()
+        return True
+    else:
+        return False
 
 def usuario_existe(usuario):
     try:
         with open('login.txt', 'r') as f:
-            for linha in f:
-                nome, _ = linha.strip().split('|')
-                if usuario == nome:
+            for l in f:
+                nome, _ = l.strip().split('|')
+                if nome == usuario:
                     return True
     except FileNotFoundError:
-         return False
+        return False
     return False
 
 def cria_usuario():
-    #cria usuario 
-    
-    usuario = input('Usuario: ')
+    cabecalho("Criar novo usuario")
+    usuario = input('Usuario: ').strip()
 
+    if not usuario:
+        print("Nome de usuário não pode ser vazio.")
+        return
+    if usuario_existe(usuario):
+        print("Usuário já existe.")
+        return
     while True:
-        senha = getpass('Senha: ')
-        conf_senha = getpass('Confirme a senha: ')
-
-        if senha != conf_senha:
-            print('as senhas não coincidem.')
-
+        senha = getpass("Senha: ")
+        conf = getpass("Confirme a senha: ")
+        if senha != conf:
+            print("As senhas não coincidem.")
         elif len(senha) < 8:
-            print('A senha deve ter pelo menos 8 caracteres.')
+            print("A senha deve ter pelo menos 8 caracteres.")
         else:
-            h = hashlib.sha256(senha.encode()).hexdigest()
             break
-        
-    with open('login.txt','a') as f:
-        f.write(f'{usuario}|{h}\n')
-
-    print('Usuario criado com sucesso!!')
+    h = hashlib.sha256(senha.encode()).hexdigest()
+    with open('login.txt', 'a') as f:
+        f.write(f"{usuario}|{h}\n")
+    print("Usuário criado com sucesso!")
 
 
 def altera_usuario(usuario_alvo, novo_usuario):

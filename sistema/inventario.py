@@ -1,398 +1,121 @@
-from sistema import *
-
-def LimpaTela():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-def menu_inventario():
-
-    cabecalho(texto='controle de inventario\n')
-    print('O que você gostaria de fazer?')
-    print('(1) cadastrar produtos ')
-    print('(2) apagar produto')
-    print('(3) consultar')
-    print('(4) mostra todo o inventario')
-    
-    x = int(input('opção: '))
-    
-
-    while True:
-        if x == 1:
-            ad_inventario(d_inventario, chave)
-            break
-        elif x == 2:
-            apaga_iten()
-            break
-        elif x == 3:
-            #LimpaTela()
-            busca_nome(d_inventario)
-            break
-        elif x == 4:
-            imp_inventario(d_inventario)
-            break
-            
-def enc_iddisp(d_inventario):
-    #função para encontrar maior chave do dicionario
-    
-    if d_inventario == {}:
-        chave = 0
-    else:
-        chave = max(d_inventario.keys())+1
-    return chave
+from .utils import cabecalho
 
 
-def def_caminho(caminho):
+def salva_inventario(inv):
+    with open('inventario.csv', 'w') as f:
+        for idp, d in inv.items():
+            f.write(f"{idp};{d[0]};{d[1]};{d[2]};{d[3]}\n")
 
-    #caminho = 'inventario.csv'
-    print('1 - para indicar um caminho')
-    print('2 - para criar um novo arquivo')
-    x= int(input('opção: '))
-    
-    if x == 1:
-        
-        return input('informe o caminho: ')
-    
-    else:
-        arq = open('inventario.csv','w')
-        arq.close()
-        
-        return 'inventario.csv'
+def prox_id(inv):
+    return max(inv.keys(), default=0) + 1
 
-def caminho():
-    
-    caminho = input('informe o caminho: ')
-    return caminho
-
-def le_inventario():
-    caminho = 'inventario.csv'
-    while True:
-        
-        try:
-            arq = open(caminho,'r')
-            
-        except FileNotFoundError:
-            caminho = def_caminho(caminho)
-        else:
-            arq.close()
-            break
-
-        try: d_inventario ={} with open('inventario.csv','r') as inventario:
-                for linha in
-                    inventario: chave, nome, qt, preco, impor =
-                    linha.rstrip().split(';') chave = int(chave) qt =
-                    int(qt) preco = float(preco) if impor == 'sim' or
-                    impor == 's': impor = True else: impor = False
-   
-                            
-                    d_inventario[chave] = [nome, qt, preco, impor]
-                    
-          
-        except :
-            print('''erro.''')
-                    
-         
-    return d_inventario
-            
-    
-    #adiciona o conteudo do arquivo em um dicionario
-    try:
-        
-        with open(caminho,'r') as inventario:
-            d_inventario ={}
-            
-
-    
-    
-    
-                
-def ad_inventario(d_inventario, chave):
-    #adiciona itens no dicionario inventario
-    #LimpaTela()
-    cabecalho(texto = 'adciona itens')
-
-    while True:
-    
-        nome = input('nome do produto: ')
-
-        if not nome:
-            print('Cadastro de produtos finalizados')
-            menu_inventario()
-            break
-
-        try:      
-            qt = int(input('quantidade: '))
-            preco = float(input('valor: '))
-            impor = input('O produto é importado:(sim/ não): ')
-
-            if impor == 'sim' or impor =='s':
-                impor = True
+def buscar_produto(inv):
+    cabecalho("Buscar Produto")
+    termo = input("Nome: ").strip().lower()
+    itens = sorted(inv.items(), key=lambda x: x[1][0].lower())
+    nomes = [i[1][0].lower() for i in itens]
+    if len(nomes) > 50:
+        # Busca binária
+        l, r = 0, len(nomes)-1
+        while l <= r:
+            m = (l+r)//2
+            if nomes[m] == termo:
+                idp = itens[m][0]
+                break
+            elif termo < nomes[m]:
+                r = m-1
             else:
-                impor = False
-                
-            d_inventario[chave] = [nome, qt, preco, impor]
-            chave +=1
-        except ValueError: 
-            print("Erro: Digite valores numéricos válidos para quantidade e preço!")
-            continue  
-
-            
-    return chave
-    
-=======
-    
-    #id = chave
-    nome = input('nome do produto: ')
-    qt = int(input('quantidade: '))
-    preco = float(input('valor: '))
-    impor = input('O produto é importado:(sim/ não): ')
-
-    if impor == 'sim' or impor =='s':
-        impor = True
-    else:
-        impor = False
-        
-    d_inventario[chave] = [nome, qt, preco, impor]
-
-    
-    return chave+1
-
-def apaga_item(d_inventario, chave):
-    del d_inventario[chave]
-
-    return d_inventario
-
-def grava_inventario(d_inventario):
-    with open('inventario.csv','w') as inventario:
-        for chave, dados in d_inventario.items():
-            nome = dados[0]
-            qt = dados[1]
-            preco = dados[2]
-            impor = dados[3]
-            inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
-
-def imp_inventario(dicionario):
-    #esta dando erro de sintax
-    print('---'*20)
-    print('produtos')
-    print('---'*20)
-
-    for chave, dados in dicionario.items():
-        nome = dados[0]
-        qt = dados[1]
-        preco = dados[2]
-        impor = dados[3]
-        print(f'{chave}: {nome} | {qt}| {preco}| {impor}')
-        #print(f'{nome} | {qt}| {preco}| {impor}')
-
-
-
-
-d_inventario = le_inventario()
-chave = enc_iddisp(d_inventario)
-#chave = ad_inventario(d_inventario, chave)
-
-#print(d_inventario)
-imp_inventario(d_inventario) 
-def enc_iddisp(d_inventario):
-    #função para encontrar maior chave do dicionario
-    
-    if d_inventario == {}:
-        chave = 0
-    else:
-        chave = max(d_inventario.keys())+1
-    return chave
-
-def caminho():
-
-    caminho = 'inventario.csv'
-    x= int(input('''1 - para indicar um caminho
-              2 - para criar um novo arquivo'''))
-
-    while True:
-        if x == 1:
-            caminho = imput('informe o caminho: ')
-            break
+                l = m+1
         else:
-            break
-            
-    return caminho
-    
-def le_inventario():
-    #adiciona o conteudo do arquivo em um dicionario
-    try:
-        d_inventario ={}
-        with open('inventario.csv','r') as inventario:
-            for linha in inventario:
-                chave, nome, qt, preco, impor = linha.rstrip().split(';')
-                chave = int(chave)
-                qt = int(qt)
-                preco = float(preco)
-                if impor == 'sim' or impor == 's':
-                    impor = True
-                else:
-                    impor = False
-
-                
-                d_inventario[chave] = [nome, qt, preco, impor]
-        
-    except FileNotFoundError:
-        print('''Arquivo inventario.csv não encontrado!!!!
-adicione o arquivo ou um novo sera criado.''')
-        caminho()        
-
-        
-           
-    return d_inventario
-                
-def ad_inventario(d_inventario, chave):
-    #adiciona itens no dicionario inventario
-    
-    
-    #id = chave
-    nome = input('nome do produto: ')
-    qt = int(input('quantidade: '))
-    preco = float(input('valor: '))
-    impor = input('O produto é importado:(sim/ não): ')
-
-    if impor == 'sim' or impor =='s':
-        impor = True
+            print("Não encontrado.")
+            return
     else:
-        impor = False
-        
-    d_inventario[chave] = [nome, qt, preco, impor]
-
-    
-    return chave+1
->>>>>>> refs/remotes/origin/main
-
-def apaga_iten(d_inventario, chave):
-    del d_inventario[chave]
-
-    return d_inventario
-
-def grava_inventario(d_inventario):
-    with open('inventario.csv','w') as inventario:
-        for chave, dados in d_inventario.items():
-            nome = dados[0]
-            qt = dados[1]
-            preco = dados[2]
-            impor = dados[3]
-            inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
-
-<<<<<<< HEAD
-def cabecalho(texto):
-    
-    print('-'*80)
-    print(f'{texto:^80}')
-    print('-'*80)
-
-def imp_inventario(dicionario):
-    m_nome = 0
-    produtos = 'produtos'
-
-    cabecalho(texto='produtos')
-  
-=======
-def imp_inventario(dicionario):
-    m_nome = 0
-    produtos = 'produtos'
-    
-    #esta dando erro de sintax
-    print('-'*80)
-    print(f'{'produtos':^80}')
-    print('-'*80)
-
->>>>>>> refs/remotes/origin/main
-    for chave, dados in dicionario.items():
-        if m_nome < len(dados[0]):
-            m_nome = len(dados[0])
-
-           
-
-    for chave, dados in dicionario.items():
-        nome = dados[0]
-        qt = dados[1]
-        preco = dados[2]
-        impor = dados[3]
-        if impor == True:
-            impor = 'importado'
-        else:
-            impor ='nacional'
-        print(f'{chave}: {nome:^{m_nome}}| {qt:>6}| {preco:>10.2f}| {impor:^10}')
-<<<<<<< HEAD
-
-def troca(L, i, j):
-    temp = L[i]
-    L[i] = L[j]
-    L[j] = temp
-
-def empurra(L, n,posicao):
-    i = 0
-    while i < n - 1:
-        if L[i][posicao] < L[i + 1][1][posicao]:
-            troca(L, i, i + 1)
-        i += 1
-        
-def bubble_sort(L, posicao=0):
-    n = len(L)
-    while n>1:
-        empurra(L, n, posicao)
-        n -= 1
-
-def ordena(dicionario, algoritmo='bubble'):
-    L = list(dicionario.items())
-    if algoritmo == 'bubble':
-        
-        bubble_sort(L)
-    else:
-        0#merge
-
-    return L
-    
-        
-def busca_nome(dicionario):
-    produto = input('qual produto: ')
-
-    quant = len(dicionario)
-
-    if quant <= 50:
-              
-        for chave, dados in L():
-            nome = dados[0]
-            qt = dados[1]
-            preco = dados[2]
-            impor = dados[3]
-            if produto == nome:
-                print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
+        # Busca linear
+        for nome_lower, (idp, _) in zip(nomes, itens):
+            if termo == nome_lower:
                 break
         else:
-            print('item não existe')
+            print("Não encontrado.")
+            return
+    d = inv[idp]
+    print(f"Encontrado ID {idp}: {d[0]} | {d[1]} | {d[2]} | {d[3]}")
+            
+def adicionar_produto(inv):
+    cabecalho("Adicionar Produto")
+    while True:
+        nome = input("Nome (vazio para sair): ").strip()
+        if not nome:
+            break
+        try:
+            qt = int(input("Quantidade: "))
+            preco = float(input("Preço: "))
+        except ValueError:
+            print("Quantidade/Preço inválido.")
+            continue
+        imp = input("Importado? (s/n): ").strip().lower() in ['s','sim']
+        idp = prox_id(inv)
+        inv[idp] = [nome, qt, preco, imp]
+        print(f"Cadastrado ID {idp}.")
+    salva_inventario(inv)
+
+def apagar_produto(inv):
+    cabecalho("Apagar Produto")
+    try:
+        idp = int(input("ID: "))
+    except ValueError:
+        print("ID inválido.")
+        return
+    if idp in inv:
+        del inv[idp]
+        salva_inventario(inv)
+        print("Apagado com sucesso.")
     else:
-        if quant <=100:
-            ordena(dicionario, 'bubble')
+        print("ID não encontrado.")
+
+def buscar_produto(inv):
+    cabecalho("Buscar Produto")
+    termo = input("Nome: ").strip().lower()
+    itens = sorted(inv.items(), key=lambda x: x[1][0].lower())
+    nomes = [i[1][0].lower() for i in itens]
+    if len(nomes) > 50:
+        # Busca binária
+        l, r = 0, len(nomes)-1
+        while l <= r:
+            m = (l+r)//2
+            if nomes[m] == termo:
+                idp = itens[m][0]
+                break
+            elif termo < nomes[m]:
+                r = m-1
+            else:
+                l = m+1
         else:
-            ordena(dicionario, 'merge')
-    #faz a busca binaria
-                            
-=======
-        #print(f'{nome} | {qt}| {preco}| {impor}')
+            print("Não encontrado.")
+            return
+    else:
+        # Busca linear
+        for nome_lower, (idp, _) in zip(nomes, itens):
+            if termo == nome_lower:
+                break
+        else:
+            print("Não encontrado.")
+            return
+    d = inv[idp]
+    print(f"Encontrado ID {idp}: {d[0]} | {d[1]} | {d[2]} | {d[3]}")
 
+def grava_inventario(d_inventario):
+    with open('inventario.csv','w') as inventario:
+        for chave, dados in d_inventario.items():
+            nome = dados[0]
+            qt = dados[1]
+            preco = dados[2]
+            impor = dados[3]
+            inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
 
-def busca_nome(dicionario):
-    produto = input('qual produto: ')
-    for chave, dados in dicionario.items():
-        nome = dados[0]
-        qt = dados[1]
-        preco = dados[2]
-        impor = dados[3]
-        if produto == nome:
-            print(f'{chave}: {nome}| {qt}| {preco}| {impor}')
-
-            #print('print(f'{chave}: {nome}| {qt:>6}| {preco}| {impor}')')
-
->>>>>>> refs/remotes/origin/main
-d_inventario = le_inventario()
-chave = enc_iddisp(d_inventario)
-#chave = ad_inventario(d_inventario, chave)
-
-#print(d_inventario)
-#imp_inventario(d_inventario) 
+def mostrar_inventario(inv):
+    cabecalho("Inventário")
+    if not inv:
+        print("Vazio.")
+        return
+    for idp, d in sorted(inv.items()):
+        print(f"ID{idp}: {d[0]} | {d[1]} | {d[2]} | {d[3]}")

@@ -36,10 +36,10 @@ class CriptografiaInventario:
         dados_cripto = {}
         for id_prod, campos in dados.items():
             campos_cripto = [
-                self._processar_texto(str(campos[0]), 'criptografar'),
-                self._processar_texto(str(campos[1]), 'criptografar'),
-                self._processar_texto(str(campos[2]), 'criptografar'),
-                self._processar_texto(str(campos[3]), 'criptografar')
+                self._processar_texto(campos[0], 'criptografar'),
+                self._processar_texto(campos[1], 'criptografar'),
+                self._processar_texto(campos[2], 'criptografar'),
+                self._processar_texto(campos[3], 'criptografar')
             ]
             dados_cripto[id_prod] = campos_cripto
         return dados_cripto
@@ -74,16 +74,3 @@ class CriptografiaInventario:
             return self.descriptografar_dados(dados_lidos)
         except FileNotFoundError:
             return {}
-
-if __name__ == "__main__":
-    chave = "minhaSenhaForte"
-    cripto = CriptografiaInventario(chave)
-
-    dados = {
-        1: ["Mouse", 10, 59.90, False],
-        2: ["Teclado", 5, 89.90, True]
-    }
-
-    cripto.salvar_em_arquivo(dados, "inventario.csv")
-    dados_lidos = cripto.carregar_do_arquivo("inventario.csv")
-    print(dados_lidos)

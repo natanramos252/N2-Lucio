@@ -1,5 +1,5 @@
 from .login import usuario_existe, cria_usuario
-from .utils import cabecalho
+from .utils import cabecalho, bubble_sort
 
 def listar_usuarios():
     cabecalho("Usuários Cadastrados")

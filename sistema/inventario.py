@@ -1,45 +1,14 @@
-from .utils import cabecalho
-
+from .utils import cabecalho, bubble_sort
 
 def salva_inventario(inv):
-    with open('inventario.csv', 'w') as f:
+    """Grava o inventário em disco (não criptografado)."""
+    with open('inventario.csv', 'w', encoding='utf-8') as f:
         for idp, d in inv.items():
             f.write(f"{idp};{d[0]};{d[1]};{d[2]};{d[3]}\n")
 
 def prox_id(inv):
     return max(inv.keys(), default=0) + 1
 
-def buscar_produto(inv):
-    cabecalho("Buscar Produto")
-    termo = input("Nome: ").strip().lower()
-    itens = sorted(inv.items(), key=lambda x: x[1][0].lower())
-    nomes = [i[1][0].lower() for i in itens]
-    if len(nomes) > 50:
-        # Busca binária
-        l, r = 0, len(nomes)-1
-        while l <= r:
-            m = (l+r)//2
-            if nomes[m] == termo:
-                idp = itens[m][0]
-                break
-            elif termo < nomes[m]:
-                r = m-1
-            else:
-                l = m+1
-        else:
-            print("Não encontrado.")
-            return
-    else:
-        # Busca linear
-        for nome_lower, (idp, _) in zip(nomes, itens):
-            if termo == nome_lower:
-                break
-        else:
-            print("Não encontrado.")
-            return
-    d = inv[idp]
-    print(f"Encontrado ID {idp}: {d[0]} | {d[1]} | {d[2]} | {d[3]}")
-            
 def adicionar_produto(inv):
     cabecalho("Adicionar Produto")
     while True:
@@ -52,7 +21,7 @@ def adicionar_produto(inv):
         except ValueError:
             print("Quantidade/Preço inválido.")
             continue
-        imp = input("Importado? (s/n): ").strip().lower() in ['s','sim']
+        imp = input("Importado? (s/n): ").strip().lower() in ['s', 'sim']
         idp = prox_id(inv)
         inv[idp] = [nome, qt, preco, imp]
         print(f"Cadastrado ID {idp}.")
@@ -75,85 +44,76 @@ def apagar_produto(inv):
 def buscar_produto(inv):
     cabecalho("Buscar Produto")
     termo = input("Nome: ").strip().lower()
-    itens = sorted(inv.items(), key=lambda x: x[1][0].lower())
-    nomes = [i[1][0].lower() for i in itens]
+    itens = bubble_sort(
+        list(inv.items()),
+        key=lambda x: x[1][0].lower()
+    )
+    nomes = [item[1][0].lower() for item in itens]
+
     if len(nomes) > 50:
         # Busca binária
-        l, r = 0, len(nomes)-1
+        l, r = 0, len(nomes) - 1
         while l <= r:
-            m = (l+r)//2
+            m = (l + r) // 2
             if nomes[m] == termo:
                 idp = itens[m][0]
                 break
             elif termo < nomes[m]:
-                r = m-1
+                r = m - 1
             else:
-                l = m+1
+                l = m + 1
         else:
             print("Não encontrado.")
             return
     else:
         # Busca linear
-        for nome_lower, (idp, _) in zip(nomes, itens):
-            if termo == nome_lower:
+        for name, (idp, _) in zip(nomes, itens):
+            if name == termo:
                 break
         else:
             print("Não encontrado.")
             return
+
     d = inv[idp]
-    print(f"Encontrado ID {idp}: {d[0]} | {d[1]} | {d[2]} | {d[3]}")
-
-def grava_inventario(d_inventario):
-    with open('inventario.csv','w') as inventario:
-        for chave, dados in d_inventario.items():
-            nome = dados[0]
-            qt = dados[1]
-            preco = dados[2]
-            impor = dados[3]
-            inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
-
-
-def troca(L, i, j):
-    temp = L[i]
-    L[i] = L[j]
-    L[j] = temp
-
-def empurra(L, n,posicao):
-    i = 0
-    while i < n - 1:
-        if L[i][posicao] < L[i + 1][1][posicao]:
-            troca(L, i, i + 1)
-        i += 1
-        
-def bubble_sort(L, posicao=0):
-    n = len(L)
-    while n>1:
-        empurra(L, n, posicao)
-        n -= 1
-        
-def ordena(dicionario, algoritmo='bubble'):
-    L = list(dicionario.items())
-    if algoritmo == 'bubble':
-        
-        bubble_sort(L)
-
+    print(f"Encontrado ID {idp}: {d[0]} | Qtde: {d[1]} | Preço: {d[2]} | Importado: {d[3]}")
 
 def mostrar_inventario(inv):
-    L = inv
-    impor = ' '
-    
     cabecalho("Inventário")
     if not inv:
-        print("Vazio.")
+        print("Inventário vazio.")
         return
-                                  
-    for idp, d in sorted(list(inv.items())):
-        if d[3] == True:
-            impor = 'importado'
+    itens = bubble_sort(
+        list(inv.items()),
+        key=lambda x: x[0]
+    )
+
+    for idp, d in itens:
+        tipo = 'importado' if d[3] else 'nacional'
+        print(f"ID {idp}: {d[0]:<20} | {d[1]:>6} | {d[2]:10.2f} | {tipo}")
+
+def gerenciar_inventario(inv, cripto):
+    """Menu do inventário, salvando criptografado após cada ação."""
+    while True:
+        cabecalho("Menu Inventário")
+        print("(0) Voltar")
+        print("(1) Cadastrar produto")
+        print("(2) Apagar produto")
+        print("(3) Buscar produto")
+        print("(4) Mostrar inventário")
+        escolha = input("Escolha: ").strip()
+
+        if escolha == '0':
+            break
+        elif escolha == '1':
+            adicionar_produto(inv)
+        elif escolha == '2':
+            apagar_produto(inv)
+        elif escolha == '3':
+            buscar_produto(inv)
+        elif escolha == '4':
+            mostrar_inventario(inv)
         else:
-            impor = 'nacional'
-        
-       
-        print(f"ID{idp}: {d[0]:^20} | {d[1]:>6} | {d[2]:10.2f} | {impor}")
+            print("Opção inválida!")
 
-
+        # Salva sempre criptografado
+        cripto.salvar_em_arquivo(inv, 'inventario.csv')

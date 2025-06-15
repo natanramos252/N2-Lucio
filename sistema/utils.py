@@ -10,3 +10,14 @@ def cabecalho(texto=''):
     if texto:
         print(texto.upper().center(80))
         print('-'*80)
+
+def bubble_sort(arr, key=None):
+    if key is None:
+        key = lambda x: x
+    L = list(arr)
+    n = len(L)
+    for i in range(n - 1):
+        for j in range(n - 1 - i):
+            if key(L[j]) > key(L[j + 1]):
+                L[j], L[j + 1] = L[j + 1], L[j]
+    return L

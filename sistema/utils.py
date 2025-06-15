@@ -6,7 +6,7 @@ def limpa_tela():
 
 def cabecalho(texto=''):
     """Imprime um cabeçalho para organização visual."""
-    print('-'*50)
+    print('-'*80)
     if texto:
-        print(texto.upper())
-        print('-'*50)
+        print(texto.upper().center(80))
+        print('-'*80)

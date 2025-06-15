@@ -1,4 +1,4 @@
-from .utils import cabecalho
+from .utils import (cabecalho, limpa_tela)
 from .cifra_cripto_inventario import CriptografiaInventario
 from .inventario import (
     adicionar_produto,
@@ -24,14 +24,19 @@ def gerenciar_inventario(inv, cripto):
         escolha = input("Escolha: ").strip()
 
         if escolha == '0':
+            #main()
             break
         elif escolha == '1':
+            limpa_tela()
             adicionar_produto(inv)
         elif escolha == '2':
+            limpa_tela()
             apagar_produto(inv)
         elif escolha == '3':
+            limpa_tela()
             buscar_produto(inv)
         elif escolha == '4':
+            limpa_tela()            
             mostrar_inventario(inv)
         else:
             print("Opção inválida.")

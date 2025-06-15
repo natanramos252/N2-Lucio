@@ -112,10 +112,48 @@ def grava_inventario(d_inventario):
             impor = dados[3]
             inventario.write(f'{chave};{nome};{qt};{preco};{impor}\n')
 
+
+def troca(L, i, j):
+    temp = L[i]
+    L[i] = L[j]
+    L[j] = temp
+
+def empurra(L, n,posicao):
+    i = 0
+    while i < n - 1:
+        if L[i][posicao] < L[i + 1][1][posicao]:
+            troca(L, i, i + 1)
+        i += 1
+        
+def bubble_sort(L, posicao=0):
+    n = len(L)
+    while n>1:
+        empurra(L, n, posicao)
+        n -= 1
+        
+def ordena(dicionario, algoritmo='bubble'):
+    L = list(dicionario.items())
+    if algoritmo == 'bubble':
+        
+        bubble_sort(L)
+
+
 def mostrar_inventario(inv):
+    L = inv
+    impor = ' '
+    
     cabecalho("Inventário")
     if not inv:
         print("Vazio.")
         return
-    for idp, d in sorted(inv.items()):
-        print(f"ID{idp}: {d[0]} | {d[1]} | {d[2]} | {d[3]}")
+                                  
+    for idp, d in sorted(list(inv.items())):
+        if d[3] == True:
+            impor = 'importado'
+        else:
+            impor = 'nacional'
+        
+       
+        print(f"ID{idp}: {d[0]:^20} | {d[1]:>6} | {d[2]:10.2f} | {impor}")
+
+
